@@ -44,11 +44,6 @@ event AddVoter(uint256 indexed electionId, address indexed voter);
 /// @param voter Address of the voter who cast the vote.
 event CastVote(uint256 indexed electionId, uint256 indexed candidateId, address indexed voter);
 
-/// @notice Emitted when the winner of an election is declared.
-/// @param electionId Unique identifier of the election.
-/// @param candidateId Unique identifier of the winning candidate.
-event WinnerDeclared(uint256 electionId, uint256 candidateId);
-
 /**
  * @title Decentralized Voting Contract
  * @author Abhishek Maurya
@@ -64,8 +59,8 @@ contract VotingContract {
     /// @notice Stores metadata for an election.
     struct ElectionDetails {
         string name;
-        uint256 startDelay;
-        uint256 endDelay;
+        uint256 startTime;
+        uint256 endTime;
         address chairPerson;
     }
 
@@ -156,9 +151,9 @@ contract VotingContract {
 
         ElectionDetails storage election = s_electionFeed[electionId];
 
-        if (block.timestamp < election.startDelay) {
+        if (block.timestamp < election.startTime) {
             return ElectionStatus.REGISTRATION;
-        } else if (block.timestamp < election.endDelay) {
+        } else if (block.timestamp < election.endTime) {
             return ElectionStatus.ACTIVE;
         } else {
             return ElectionStatus.ENDED;
@@ -166,11 +161,11 @@ contract VotingContract {
     }
 
     /// @notice Creates a new election.
-    /// @param startDelay Seconds from now until voting starts.
-    /// @param endDelay Seconds from now until voting ends.
+    /// @param startTime Seconds from now until voting starts.
+    /// @param endTime Seconds from now until voting ends.
     /// @param _chairPerson Address managing the election.
     /// @param name Name of the election.
-    function createElection(uint256 startDelay, uint256 endDelay, address _chairPerson, string memory name)
+    function createElection(uint256 startTime, uint256 endTime, address _chairPerson, string memory name)
         external
         onlyOwner
     {
@@ -178,11 +173,11 @@ contract VotingContract {
             revert InvalidAddress();
         }
 
-        if (startDelay == 0 || endDelay == 0) {
+        if (startTime == 0 || endTime == 0) {
             revert IntervalsCannotBeZero();
         }
 
-        if (endDelay <= startDelay) {
+        if (endTime <= startTime) {
             revert InvalidTimeRange();
         }
         if (bytes(name).length == 0) revert EmptyStringNotAccepted();
@@ -196,8 +191,8 @@ contract VotingContract {
         // This adds the election data to ElectionId.
         s_electionFeed[s_electionId] = ElectionDetails({
             name: name,
-            startDelay: block.timestamp + startDelay,
-            endDelay: block.timestamp + endDelay,
+            startTime: block.timestamp + startTime,
+            endTime: block.timestamp + endTime,
             chairPerson: _chairPerson
         });
 
@@ -285,7 +280,7 @@ contract VotingContract {
     /// @notice Returns and declares the winning candidate of an election.
     /// @param electionId Unique identifier of the election.
     /// @return winnerId Candidate ID with highest votes.
-    function declareWinner(uint256 electionId) external onlyOwner returns (uint256) {
+    function declareWinner(uint256 electionId) external view returns (uint256) {
         if (!s_electionIdExists[electionId]) revert ElectionIdNotFound();
         if (s_electionCandidates[electionId].length == 0) revert NoElectionCandidateExists();
         if (getElectionStatus(electionId) != ElectionStatus.ENDED) {
@@ -304,7 +299,6 @@ contract VotingContract {
             }
         }
         if (highestVoteCount == 0) revert NoVotesCast();
-        emit WinnerDeclared(electionId, winnerId);
         return (winnerId);
     }
 
