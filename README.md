@@ -1,8 +1,8 @@
-# 🗳️ Decentralized Voting Smart Contract
+# Decentralized Voting Smart Contract
 
 A decentralized voting system built in Solidity that allows an owner to create elections, assign chairpersons, register candidates and voters, conduct secure voting, and declare winners.
 
-## ✨ Features
+## Features
 
 - Create and manage elections
 - Chairperson-based candidate registration
@@ -13,8 +13,9 @@ A decentralized voting system built in Solidity that allows an owner to create e
 - Custom errors for gas efficiency
 - NatSpec documented
 - Event logging for all state changes
+- Comprehensive Foundry test suite with reusable `BaseTest`
 
-## 🏗️ Election Workflow
+## Election Workflow
 
 ```text
 Owner
@@ -44,13 +45,13 @@ Voting Ends
 Declare Winner
 ```
 
-## 📋 Election Status
+## Election Status
 
 - **REGISTRATION** – Candidate and voter registration
 - **ACTIVE** – Voting is open
 - **ENDED** – Winner can be declared
 
-## 🔑 Main Functions
+## Main Functions
 
 | Function | Description |
 |----------|-------------|
@@ -61,7 +62,18 @@ Declare Winner
 | `getWinner()` | Declares and returns the winner |
 | `getElectionStatus()` | Returns the current election status |
 
-## 🛡️ Security Features
+## Testing
+
+The project includes a reusable **BaseTest** contract built with **Foundry** that provides:
+
+- Shared contract deployment
+- Election creation helpers
+- Candidate registration helpers
+- Voter registration helpers
+- Time-warp utilities for testing registration, voting, and ended phases
+- Reduced code duplication across test contracts
+
+## Security Features
 
 - Owner-only election creation
 - Chairperson-only candidate and voter registration
@@ -78,7 +90,7 @@ Declare Winner
 - Forge
 - Anvil
 
-## 🚀 Future Improvements
+## Future Improvements
 
 - Tie handling
 - Batch voter registration

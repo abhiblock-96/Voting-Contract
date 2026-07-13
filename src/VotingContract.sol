@@ -117,16 +117,16 @@ contract VotingContract {
     mapping(uint256 => mapping(uint256 => bool)) public s_candidateExists;
 
     /// @notice Contract owner.
-    address private immutable i_owner;
+    address public immutable i_owner;
 
     /// @notice Stores all election IDs.
-    uint256[] private s_electionIdList;
+    uint256[] public s_electionIdList;
 
     /// @notice Auto-incrementing election ID.
-    uint256 private s_electionId = 1;
+    uint256 public s_electionId = 1;
 
     /// @notice Auto-incrementing candidate ID.
-    uint256 private s_candidateId = 101;
+    uint256 public s_candidateId = 101;
 
     /* Constructor Declaration */
 
