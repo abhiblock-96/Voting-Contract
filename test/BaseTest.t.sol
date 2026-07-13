@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-
 import {Test} from "forge-std/Test.sol";
 import {VotingContract} from "src/VotingContract.sol";
 
@@ -28,7 +27,6 @@ contract BaseTest is Test {
     /// @notice Deploys a fresh VotingContract instance before each test.
     /// @dev Deploys the contract using the predefined owner test account.
     function setUp() public {
-
         vm.prank(owner);
         votingContract = new VotingContract();
     }
