@@ -1,7 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import {console} from "forge-std/Console.sol";
 import "src/VotingContract.sol";
 import {BaseTest} from "test/BaseTest.t.sol";
 
